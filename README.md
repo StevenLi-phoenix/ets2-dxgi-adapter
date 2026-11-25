@@ -136,6 +136,17 @@ output order the proxy presents, then creates a D3D11 device. Put an
   target monitor.
 - If the game still opens on the primary display, check that `hook_win32=1` and
   that `monitor` resolves. The log prints `monitor=auto resolved to ...`.
+- **To tell whether a crash comes from the proxy**, look at
+  `Documents\Euro Truck Simulator 2\game.crash.txt`. The proxy only runs when the
+  game enumerates displays and places its window. If no frame in the call stack is
+  `dxgi.dll` and the crash happens after the game is running, the proxy is not
+  involved. A common cause is an outdated mod. One seen in testing: a mod built for
+  1.37–1.39 overrode truck interior definitions with an `@include "glass.dat"`.
+  - The game log then shows `Failed to open file '.../interior/glass.dat'` and
+    `Missing accessory (/def/vehicle/truck/<truck>/interior/...)`.
+  - The game crashed with an access violation in `eurotrucks2.exe` as soon as a
+    Quick Job spawned one of those trucks.
+  - Disabling the mod fixed it.
 
 ## Caveats
 
